@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Учебные материалы для студентов">
+    <title>Материалы - Портфолио преподавателя</title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/unicons.css">
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+
+    <nav class="navbar navbar-expand-sm navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><i class='uil uil-graduation-cap'></i> Преподаватель</a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a href="index.html#about" class="nav-link"><span data-hover="Обо мне">Обо мне</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.html#portfolio" class="nav-link"><span data-hover="Портфолио">Портфолио</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.html#experience" class="nav-link"><span data-hover="Опыт">Опыт</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.html#achievements" class="nav-link"><span data-hover="Достижения">Достижения</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.html#contact" class="nav-link"><span data-hover="Контакты">Контакты</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="materials.html" class="nav-link active"><span data-hover="Материалы">Материалы</span></a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav ml-lg-auto" id="auth-nav">
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="materials-section full-screen d-lg-flex justify-content-center align-items-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center mb-5">
+                    <h1>Учебные материалы</h1>
+                    <p class="lead">Полезные материалы для студентов</p>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">Все</button>
+                        <button class="filter-btn" data-filter="lectures">Лекции</button>
+                        <button class="filter-btn" data-filter="practical">Практические</button>
+                        <button class="filter-btn" data-filter="methodical">Методические</button>
+                        <button class="filter-btn" data-filter="tests">Тесты</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" id="materials-list">
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-12">                                
+                    <p class="copyright-text text-center">&copy; <span id="current-year"></span> Портфолио преподавателя. Все права защищены</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        const Materials = {
+            init() {
+                this.checkStorage();
+                this.loadMaterials();
+                this.initFilters();
+                document.getElementById('current-year').textContent = new Date().getFullYear();
+            },
+
+            checkStorage() {
+                if (!localStorage.getItem('materials')) {
+                    const defaultData = [
+                        { id: 1, title: 'Введение в педагогику', type: 'lectures', description: 'Основные понятия и категории педагогики', date: '2024-09-01', downloads: 156 },
+                        { id: 2, title: 'Методы обучения', type: 'lectures', description: 'Классификация методов обучения', date: '2024-09-08', downloads: 142 },
+                        { id: 3, title: 'Практическое занятие 1', type: 'practical', description: 'Разработка плана урока', date: '2024-09-15', downloads: 98 },
+                        { id: 4, title: 'Практическое занятие 2', type: 'practical', description: 'Проведение дидактической игры', date: '2024-09-22', downloads: 87 },
+                        { id: 5, title: 'Методичка по курсовой', type: 'methodical', description: 'Требования к оформлению курсовой работы', date: '2024-10-01', downloads: 203 },
+                        { id: 6, title: 'Оценочные средства', type: 'methodical', description: 'Критерии оценивания знаний', date: '2024-10-10', downloads: 134 },
+                        { id: 7, title: 'Тест 1 - Педагогика', type: 'tests', description: 'Тест по основам педагогики', date: '2024-10-15', downloads: 89 },
+                        { id: 8, title: 'Тест 2 - Методика', type: 'tests', description: 'Тест по методике преподавания', date: '2024-10-20', downloads: 76 }
+                    ];
+                    localStorage.setItem('materials', JSON.stringify(defaultData));
+                }
+            },
+
+            getData() {
+                return JSON.parse(localStorage.getItem('materials')) || [];
+            },
+
+            loadMaterials(filter = 'all') {
+                const container = document.getElementById('materials-list');
+                const data = this.getData();
+                const filtered = filter === 'all' ? data : data.filter(m => m.type === filter);
+                
+                container.innerHTML = filtered.map(m => `
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="material-card">
+                            <div class="material-type type-${m.type}">${this.getTypeLabel(m.type)}</div>
+                            <h4>${m.title}</h4>
+                            <p>${m.description}</p>
+                            <div class="material-meta">
+                                <span><i class="uil uil-calendar-alt"></i> ${this.formatDate(m.date)}</span>
+                                <span><i class="uil uil-download-alt"></i> ${m.downloads}</span>
+                            </div>
+                            <button class="btn custom-btn custom-btn-bg btn-sm" onclick="Materials.download(${m.id})">Скачать</button>
+                        </div>
+                    </div>
+                `).join('');
+            },
+
+            getTypeLabel(type) {
+                const labels = { lectures: 'Лекция', practical: 'Практика', methodical: 'Методичка', tests: 'Тест' };
+                return labels[type] || type;
+            },
+
+            formatDate(dateStr) {
+                const date = new Date(dateStr);
+                return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+            },
+
+            initFilters() {
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        Materials.loadMaterials(this.dataset.filter);
+                    });
+                });
+            },
+
+            download(id) {
+                const data = this.getData();
+                const material = data.find(m => m.id === id);
+                material.downloads = (material.downloads || 0) + 1;
+                localStorage.setItem('materials', JSON.stringify(data));
+                this.loadMaterials(document.querySelector('.filter-btn.active').dataset.filter);
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => Materials.init());
+    </script>
+
+  </body>
+</html>

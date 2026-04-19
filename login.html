@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Вход - Портфолио преподавателя</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/unicons.css">
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+
+    <div class="auth-page">
+      <div class="auth-card">
+        <h2>Вход в систему</h2>
+        <form id="login-form">
+          <div class="form-group">
+            <label for="login">Логин</label>
+            <input type="text" class="form-control" id="login" required>
+          </div>
+          <div class="form-group">
+            <label for="password">Пароль</label>
+            <input type="password" class="form-control" id="password" required>
+          </div>
+          <div class="error-message" id="error-message"></div>
+          <button type="submit" class="btn custom-btn custom-btn-bg">Войти</button>
+        </form>
+        <div class="auth-links">
+          <p>Нет аккаунта? <a href="register.html">Зарегистрироваться</a></p>
+          <p><a href="index.html">Вернуться на главную</a></p>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+      document.getElementById('login-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const login = document.getElementById('login').value;
+        const password = document.getElementById('password').value;
+        const result = App.login(login, password);
+
+        if (result.success) {
+          if (result.user.role === 'admin') {
+            window.location.href = 'admin.html';
+          } else {
+            window.location.href = 'index.html';
+          }
+        } else {
+          document.getElementById('error-message').textContent = result.message;
+          document.getElementById('error-message').style.display = 'block';
+        }
+      });
+    </script>
+  </body>
+</html>

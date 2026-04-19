@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Админ-панель - Портфолио преподавателя</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/unicons.css">
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+
+    <div class="admin-page">
+      <div class="sidebar">
+        <a href="index.html" class="sidebar-brand"><i class='uil uil-graduation-cap'></i> Админ-панель</a>
+        <ul class="sidebar-nav">
+          <li><a href="#" class="active" data-section="dashboard"><i class='uil uil-dashboard'></i> Обзор</a></li>
+          <li><a href="#" data-section="profile"><i class='uil uil-user'></i> Профиль</a></li>
+          <li><a href="#" data-section="achievements"><i class='uil uil-trophy'></i> Достижения</a></li>
+          <li><a href="#" data-section="experience"><i class='uil uil-briefcase-alt'></i> Опыт работы</a></li>
+          <li><a href="#" data-section="education"><i class='uil uil-book'></i> Образование</a></li>
+          <li><a href="#" data-section="portfolio"><i class='uil uil-image'></i> Портфолио</a></li>
+          <li><a href="#" data-section="materials"><i class='uil uil-file-alt'></i> Материалы</a></li>
+          <li><a href="#" data-section="users"><i class='uil uil-users-alt'></i> Пользователи</a></li>
+          <li><a href="index.html"><i class='uil uil-home'></i> На сайт</a></li>
+        </ul>
+      </div>
+
+      <div class="main-content">
+        <div class="admin-header">
+          <h2>Панель управления</h2>
+          <div>
+            <span id="admin-name">Администратор</span>
+            <span class="logout-btn" onclick="App.logout()">Выйти</span>
+          </div>
+        </div>
+
+        <div class="alert" id="alert-message" style="display: none;"></div>
+
+        <div id="dashboard-section" class="admin-section">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <i class="uil uil-trophy"></i>
+              <h4 id="stat-achievements">0</h4>
+              <p>Достижений</p>
+            </div>
+            <div class="stat-card">
+              <i class="uil uil-briefcase-alt"></i>
+              <h4 id="stat-experience">0</h4>
+              <p>Мест работы</p>
+            </div>
+            <div class="stat-card">
+              <i class="uil uil-book"></i>
+              <h4 id="stat-education">0</h4>
+              <p>Образований</p>
+            </div>
+            <div class="stat-card">
+              <i class="uil uil-users-alt"></i>
+              <h4 id="stat-users">0</h4>
+              <p>Пользователей</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="profile-section" class="admin-section" style="display: none;">
+          <div class="admin-card">
+            <h3>Редактирование профиля</h3>
+            <form id="profile-form">
+              <div class="form-group">
+                <label for="teacher-name">ФИО</label>
+                <input type="text" class="form-control" id="teacher-name">
+              </div>
+              <div class="form-group">
+                <label for="teacher-bio">О себе</label>
+                <textarea class="form-control" id="teacher-bio"></textarea>
+              </div>
+              <button type="submit" class="btn custom-btn custom-btn-bg">Сохранить</button>
+            </form>
+          </div>
+        </div>
+
+        <div id="achievements-section" class="admin-section" style="display: none;">
+          <div class="admin-card">
+            <h3>Добавить достижение</h3>
+            <form id="achievement-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="achievement-title">Название</label>
+                  <input type="text" class="form-control" id="achievement-title" required>
+                </div>
+                <div class="form-group">
+                  <label for="achievement-year">Год</label>
+                  <input type="text" class="form-control" id="achievement-year" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="achievement-icon">Иконка (класс)</label>
+                <select class="form-control" id="achievement-icon">
+                  <option value="uil-trophy">uil-trophy</option>
+                  <option value="uil-book">uil-book</option>
+                  <option value="uil-users-alt">uil-users-alt</option>
+                  <option value="uil-star">uil-star</option>
+                  <option value="uilMedal">uil-medal</option>
+                </select>
+              </div>
+              <button type="submit" class="btn custom-btn custom-btn-bg">Добавить</button>
+            </form>
+          </div>
+
+          <div class="admin-card">
+            <h3>Список достижений</h3>
+            <table class="data-table" id="achievements-table">
+              <thead>
+                <tr>
+                  <th>Название</th>
+                  <th>Год</th>
+                  <th>Действия</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="experience-section" class="admin-section" style="display: none;">
+          <div class="admin-card">
+            <h3>Добавить место работы</h3>
+            <form id="experience-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="exp-year">Год</label>
+                  <input type="text" class="form-control" id="exp-year" required>
+                </div>
+                <div class="form-group">
+                  <label for="exp-title">Должность</label>
+                  <input type="text" class="form-control" id="exp-title" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="exp-place">Место работы</label>
+                <input type="text" class="form-control" id="exp-place" required>
+              </div>
+              <div class="form-group">
+                <label for="exp-desc">Описание</label>
+                <textarea class="form-control" id="exp-desc"></textarea>
+              </div>
+              <button type="submit" class="btn custom-btn custom-btn-bg">Добавить</button>
+            </form>
+          </div>
+
+          <div class="admin-card">
+            <h3>Опыт работы</h3>
+            <table class="data-table" id="experience-table">
+              <thead>
+                <tr>
+                  <th>Год</th>
+                  <th>Должность</th>
+                  <th>Место</th>
+                  <th>Действия</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="education-section" class="admin-section" style="display: none;">
+          <div class="admin-card">
+            <h3>Добавить образование</h3>
+            <form id="education-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="edu-year">Год</label>
+                  <input type="text" class="form-control" id="edu-year" required>
+                </div>
+                <div class="form-group">
+                  <label for="edu-title">Квалификация</label>
+                  <input type="text" class="form-control" id="edu-title" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="edu-place">Учебное заведение</label>
+                <input type="text" class="form-control" id="edu-place" required>
+              </div>
+              <div class="form-group">
+                <label for="edu-desc">Описание</label>
+                <textarea class="form-control" id="edu-desc"></textarea>
+              </div>
+              <button type="submit" class="btn custom-btn custom-btn-bg">Добавить</button>
+            </form>
+          </div>
+
+          <div class="admin-card">
+            <h3>Образование</h3>
+            <table class="data-table" id="education-table">
+              <thead>
+                <tr>
+                  <th>Год</th>
+                  <th>Квалификация</th>
+                  <th>Место</th>
+                  <th>Действия</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="portfolio-section" class="admin-section" style="display: none;">
+          <div class="admin-card">
+            <h3>Добавить работу в портфолио</h3>
+            <form id="portfolio-form">
+              <div class="form-group">
+                <label for="portfolio-title">Название</label>
+                <input type="text" class="form-control" id="portfolio-title" required>
+              </div>
+              <div class="form-group">
+                <label for="portfolio-image">Изображение</label>
+                <select class="form-control" id="portfolio-image">
+                  <option value="images/project/project-image01.png">project-image01.png</option>
+                  <option value="images/project/project-image02.png">project-image02.png</option>
+                  <option value="images/project/project-image03.png">project-image03.png</option>
+                  <option value="images/project/project-image04.png">project-image04.png</option>
+                  <option value="images/project/project-image05.png">project-image05.png</option>
+                </select>
+              </div>
+              <button type="submit" class="btn custom-btn custom-btn-bg">Добавить</button>
+            </form>
+          </div>
+
+          <div class="admin-card">
+            <h3>Портфолио</h3>
+            <table class="data-table" id="portfolio-table">
+              <thead>
+                <tr>
+                  <th>Название</th>
+                  <th>И��ображение</th>
+                  <th>Действия</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="materials-section" class="admin-section" style="display: none;">
+          <div class="admin-card">
+            <h3>Добавить материал</h3>
+            <form id="material-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="material-title">Название</label>
+                  <input type="text" class="form-control" id="material-title" required>
+                </div>
+                <div class="form-group">
+                  <label for="material-type">Тип</label>
+                  <select class="form-control" id="material-type">
+                    <option value="lectures">Лекция</option>
+                    <option value="practical">Практическое занятие</option>
+                    <option value="methodical">Методический материал</option>
+                    <option value="tests">Тест</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="material-desc">Описание</label>
+                <textarea class="form-control" id="material-desc"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="material-date">Дата</label>
+                <input type="date" class="form-control" id="material-date">
+              </div>
+              <button type="submit" class="btn custom-btn custom-btn-bg">Добавить</button>
+            </form>
+          </div>
+
+          <div class="admin-card">
+            <h3>Материалы</h3>
+            <table class="data-table" id="materials-table">
+              <thead>
+                <tr>
+                  <th>Название</th>
+                  <th>Тип</th>
+                  <th>Дата</th>
+                  <th>Скачиваний</th>
+                  <th>Действия</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="users-section" class="admin-section" style="display: none;">
+          <div class="admin-card">
+            <h3>Пользователи системы</h3>
+            <table class="data-table" id="users-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Имя</th>
+                  <th>Логин</th>
+                  <th>Роль</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+      $(document).ready(function() {
+        const currentUser = App.getCurrentUser();
+        if (!currentUser || currentUser.role !== 'admin') {
+          window.location.href = 'login.html';
+          return;
+        }
+
+        $('#admin-name').text(currentUser.name);
+
+        App.loadAdminData = function() {
+          const data = JSON.parse(localStorage.getItem(App.STORAGE_KEY));
+          const users = JSON.parse(localStorage.getItem(App.USERS_KEY));
+          return { data, users };
+        };
+
+        function loadDashboard() {
+          const { data, users } = App.loadAdminData();
+          $('#stat-achievements').text(data.achievements.length);
+          $('#stat-experience').text(data.experience.length);
+          $('#stat-education').text(data.education.length);
+          $('#stat-users').text(users.length);
+        }
+
+        function loadProfile() {
+          const { data } = App.loadAdminData();
+          $('#teacher-name').val(data.teacherName);
+          $('#teacher-bio').val(data.teacherBio);
+        }
+
+        function loadAchievements() {
+          const { data } = App.loadAdminData();
+          $('#achievements-table tbody').html(data.achievements.map((a, i) => `
+            <tr>
+              <td>${a.title}</td>
+              <td>${a.year}</td>
+              <td>
+                <button class="btn btn-sm btn-delete" onclick="deleteAchievement(${i})">Удалить</button>
+              </td>
+            </tr>
+          `).join(''));
+        }
+
+        function loadExperience() {
+          const { data } = App.loadAdminData();
+          $('#experience-table tbody').html(data.experience.map((e, i) => `
+            <tr>
+              <td>${e.year}</td>
+              <td>${e.title}</td>
+              <td>${e.place}</td>
+              <td>
+                <button class="btn btn-sm btn-delete" onclick="deleteExperience(${i})">Удалить</button>
+              </td>
+            </tr>
+          `).join(''));
+        }
+
+        function loadEducation() {
+          const { data } = App.loadAdminData();
+          $('#education-table tbody').html(data.education.map((e, i) => `
+            <tr>
+              <td>${e.year}</td>
+              <td>${e.title}</td>
+              <td>${e.place}</td>
+              <td>
+                <button class="btn btn-sm btn-delete" onclick="deleteEducation(${i})">Удалить</button>
+              </td>
+            </tr>
+          `).join(''));
+        }
+
+        function loadPortfolio() {
+          const { data } = App.loadAdminData();
+          $('#portfolio-table tbody').html(data.portfolio.map((p, i) => `
+            <tr>
+              <td>${p.title}</td>
+              <td>${p.image}</td>
+              <td>
+                <button class="btn btn-sm btn-delete" onclick="deletePortfolio(${i})">Удалить</button>
+              </td>
+            </tr>
+          `).join(''));
+        }
+
+        function loadMaterials() {
+          const materials = JSON.parse(localStorage.getItem('materials')) || [];
+          const typeLabels = { lectures: 'Лекция', practical: 'Практика', methodical: 'Методичка', tests: 'Тест' };
+          $('#materials-table tbody').html(materials.map((m, i) => `
+            <tr>
+              <td>${m.title}</td>
+              <td>${typeLabels[m.type] || m.type}</td>
+              <td>${m.date}</td>
+              <td>${m.downloads || 0}</td>
+              <td>
+                <button class="btn btn-sm btn-delete" onclick="deleteMaterial(${i})">Удалить</button>
+              </td>
+            </tr>
+          `).join(''));
+        }
+
+        function loadUsers() {
+          const { users } = App.loadAdminData();
+          $('#users-table tbody').html(users.map(u => `
+            <tr>
+              <td>${u.id}</td>
+              <td>${u.name}</td>
+              <td>${u.login}</td>
+              <td>${u.role === 'admin' ? 'Админ' : 'Преподаватель'}</td>
+            </tr>
+          `).join(''));
+        }
+
+        window.deleteAchievement = function(index) {
+          App.deleteAchievement(index);
+          loadAchievements();
+          loadDashboard();
+          showAlert('Достижение удалено', 'success');
+        };
+
+        window.deleteExperience = function(index) {
+          App.deleteExperience(index);
+          loadExperience();
+          loadDashboard();
+          showAlert('Запись удалена', 'success');
+        };
+
+        window.deleteEducation = function(index) {
+          const data = JSON.parse(localStorage.getItem(App.STORAGE_KEY));
+          data.education.splice(index, 1);
+          localStorage.setItem(App.STORAGE_KEY, JSON.stringify(data));
+          loadEducation();
+          loadDashboard();
+          showAlert('Запись удалена', 'success');
+        };
+
+        window.deletePortfolio = function(index) {
+          const data = JSON.parse(localStorage.getItem(App.STORAGE_KEY));
+          data.portfolio.splice(index, 1);
+          localStorage.setItem(App.STORAGE_KEY, JSON.stringify(data));
+          loadPortfolio();
+          showAlert('Запись удалена', 'success');
+        };
+
+        window.deleteMaterial = function(index) {
+          const materials = JSON.parse(localStorage.getItem('materials')) || [];
+          materials.splice(index, 1);
+          localStorage.setItem('materials', JSON.stringify(materials));
+          loadMaterials();
+          showAlert('Материал удалён', 'success');
+        };
+
+        function showAlert(message, type) {
+          $('#alert-message').text(message).removeClass('alert-success alert-error').addClass('alert-' + type).show();
+          setTimeout(() => $('#alert-message').hide(), 3000);
+        }
+
+        $('.sidebar-nav a').on('click', function(e) {
+          e.preventDefault();
+          $('.sidebar-nav a').removeClass('active');
+          $(this).addClass('active');
+
+          const section = $(this).data('section');
+          $('.admin-section').hide();
+          $('#' + section + '-section').show();
+
+          if (section === 'dashboard') loadDashboard();
+          if (section === 'profile') loadProfile();
+          if (section === 'achievements') loadAchievements();
+          if (section === 'experience') loadExperience();
+          if (section === 'education') loadEducation();
+          if (section === 'portfolio') loadPortfolio();
+          if (section === 'materials') loadMaterials();
+          if (section === 'users') loadUsers();
+        });
+
+        $('#profile-form').on('submit', function(e) {
+          e.preventDefault();
+          App.savePortfolioData({
+            teacherName: $('#teacher-name').val(),
+            teacherBio: $('#teacher-bio').val()
+          });
+          showAlert('Профиль сохранён', 'success');
+        });
+
+        $('#achievement-form').on('submit', function(e) {
+          e.preventDefault();
+          App.saveAchievement({
+            title: $('#achievement-title').val(),
+            year: $('#achievement-year').val(),
+            icon: $('#achievement-icon').val()
+          });
+          loadAchievements();
+          loadDashboard();
+          showAlert('Достижение добавлено', 'success');
+          this.reset();
+        });
+
+        $('#experience-form').on('submit', function(e) {
+          e.preventDefault();
+          const data = JSON.parse(localStorage.getItem(App.STORAGE_KEY));
+          data.experience.push({
+            year: $('#exp-year').val(),
+            title: $('#exp-title').val(),
+            place: $('#exp-place').val(),
+            description: $('#exp-desc').val()
+          });
+          localStorage.setItem(App.STORAGE_KEY, JSON.stringify(data));
+          loadExperience();
+          loadDashboard();
+          showAlert('Запись добавлена', 'success');
+          this.reset();
+        });
+
+        $('#education-form').on('submit', function(e) {
+          e.preventDefault();
+          const data = JSON.parse(localStorage.getItem(App.STORAGE_KEY));
+          data.education.push({
+            year: $('#edu-year').val(),
+            title: $('#edu-title').val(),
+            place: $('#edu-place').val(),
+            description: $('#edu-desc').val()
+          });
+          localStorage.setItem(App.STORAGE_KEY, JSON.stringify(data));
+          loadEducation();
+          loadDashboard();
+          showAlert('Запись добавлена', 'success');
+          this.reset();
+        });
+
+        $('#portfolio-form').on('submit', function(e) {
+          e.preventDefault();
+          const data = JSON.parse(localStorage.getItem(App.STORAGE_KEY));
+          data.portfolio.push({
+            title: $('#portfolio-title').val(),
+            image: $('#portfolio-image').val()
+          });
+          localStorage.setItem(App.STORAGE_KEY, JSON.stringify(data));
+          loadPortfolio();
+          showAlert('Запись добавлена', 'success');
+          this.reset();
+        });
+
+        $('#material-form').on('submit', function(e) {
+          e.preventDefault();
+          const materials = JSON.parse(localStorage.getItem('materials')) || [];
+          materials.push({
+            id: materials.length + 1,
+            title: $('#material-title').val(),
+            type: $('#material-type').val(),
+            description: $('#material-desc').val(),
+            date: $('#material-date').val() || new Date().toISOString().split('T')[0],
+            downloads: 0
+          });
+          localStorage.setItem('materials', JSON.stringify(materials));
+          loadMaterials();
+          showAlert('Материал добавлен', 'success');
+          this.reset();
+        });
+
+        loadDashboard();
+      });
+    </script>
+  </body>
+</html>

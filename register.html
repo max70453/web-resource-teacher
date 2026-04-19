@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Регистрация - Портфолио преподавателя</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/unicons.css">
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+
+    <div class="auth-page">
+      <div class="auth-card">
+        <h2>Регистрация</h2>
+        <form id="register-form">
+          <div class="form-group">
+            <label for="name">ФИО</label>
+            <input type="text" class="form-control" id="name" required>
+          </div>
+          <div class="form-group">
+            <label for="login">Логин</label>
+            <input type="text" class="form-control" id="login" required>
+          </div>
+          <div class="form-group">
+            <label for="password">Пароль</label>
+            <input type="password" class="form-control" id="password" required>
+          </div>
+          <div class="form-group">
+            <label for="confirm-password">Подтверждение пароля</label>
+            <input type="password" class="form-control" id="confirm-password" required>
+          </div>
+          <div class="error-message" id="error-message"></div>
+          <button type="submit" class="btn custom-btn custom-btn-bg">Зарегистрироваться</button>
+        </form>
+        <div class="auth-links">
+          <p>Уже есть аккаунт? <a href="login.html">Войти</a></p>
+          <p><a href="index.html">Вернуться на главную</a></p>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+      document.getElementById('register-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const errorEl = document.getElementById('error-message');
+        
+        const name = document.getElementById('name').value;
+        const login = document.getElementById('login').value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+
+        if (password !== confirmPassword) {
+          errorEl.textContent = 'Пароли не совпадают';
+          errorEl.style.display = 'block';
+          return;
+        }
+
+        const result = App.register({ name, login, password });
+
+        if (result.success) {
+          App.setCurrentUser(result.user);
+          window.location.href = 'index.html';
+        } else {
+          errorEl.textContent = result.message;
+          errorEl.style.display = 'block';
+        }
+      });
+    </script>
+  </body>
+</html>
