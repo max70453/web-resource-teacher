@@ -680,8 +680,10 @@ textarea.form-control {
   }
 }
 
-.materials-section.full-screen {
-  padding-top: 80px;
+.materials-section {
+  background: #fff;
+  padding-top: 120px;
+  min-height: calc(100vh - 70px);
 }
 
 .materials-section h1 {
