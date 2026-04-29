@@ -17,12 +17,17 @@ const App = {
   initStorage() {
     if (!localStorage.getItem(this.STORAGE_KEY)) {
       const defaultData = {
-        teacherName: 'Преподаватель',
-        teacherBio: 'Преподаватель педагогического колледжа с многолетним стажем работы. Специализируюсь на методике преподавания и педагогическом мастерстве.',
+        teacherName: 'Соколова Ольга Михайловна',
+        teacherBio: 'Преподаватель педагогического колледжа с многолетним стажем работы. Специализируюсь на методике преподавания и педагогическом мастерстве. В своей практике сочетаю классические педагогические подходы с интерактивными методами обучения. Активно участвую в профессиональных конференциях и педагогических форумах, где представляю собственные наработки. Считаю важным не только передавать знания, но и вдохновлять студентов на развитие собственного педагогического стиля.',
         achievements: [
-          { title: 'Почётный работник образования', year: '2019', icon: 'uil-trophy' },
-          { title: 'Лучший методист года', year: '2020', icon: 'uil-book' },
-          { title: 'Педагог года', year: '2021', icon: 'uil-users-alt' }
+          { title: 'Почётный работник образования', year: '2019', image: '/images/award1.jpg' },
+          { title: 'Лучший методист года', year: '2020', image: '/images/award2.jpg' },
+          { title: 'Педагог года', year: '2021', image: '/images/award3.jpg' },
+          { title: 'Победитель конкурса инноваций', year: '2022', image: '/images/award4.jpg' },
+          { title: 'Научное руководство', year: '2023', image: '/images/award5.jpg' },
+          { title: 'Международная стажировка', year: '2024', image: '/images/award6.jpg' },
+          { title: 'Автор учебного пособия', year: '2025', image: '/images/award7.jpg' },
+          { title: 'Эксперт комиссии', year: '2026', image: '/images/award8.jpg' }
         ],
         experience: [
           { year: '2019', title: 'Преподаватель', place: 'Педагогический колледж', description: 'Веду занятия по педагогике и методике преподавания. Руковожу курсовыми и дипломными работами.' },
@@ -48,7 +53,7 @@ const App = {
     if (!localStorage.getItem(this.USERS_KEY)) {
       const defaultUsers = [
         { id: 1, login: 'admin', password: 'admin123', role: 'admin', name: 'Администратор' },
-        { id: 2, login: 'teacher', password: 'teacher123', role: 'teacher', name: 'Преподаватель' }
+        { id: 2, login: 'student', password: 'student123', role: 'student', name: 'Студент' }
       ];
       localStorage.setItem(this.USERS_KEY, JSON.stringify(defaultUsers));
     }
@@ -107,13 +112,13 @@ const App = {
     const portfolioEl = document.getElementById('portfolio-carousel');
 
     if (nameEl) nameEl.textContent = data.teacherName;
-    if (bioEl) bioEl.textContent = data.teacherBio;
+    // if (bioEl) bioEl.innerHTML = data.teacherBio.replace(/\. /g, '.<br>');
 
     if (achievementsEl && data.achievements) {
       achievementsEl.innerHTML = data.achievements.map(a => `
-        <div class="col-md-4 mb-3">
+        <div class="col-md-3 mb-3">
           <div class="achievement-card">
-            <i class="uil ${a.icon}"></i>
+            <img src="${a.image}" class="img-fluid" alt="${a.title}">
             <h4>${a.title}</h4>
             <p>${a.year}</p>
           </div>
@@ -169,7 +174,7 @@ const App = {
       id: users.length + 1,
       login: userData.login,
       password: userData.password,
-      role: 'teacher',
+      role: 'student',
       name: userData.name
     };
 
@@ -198,7 +203,8 @@ const App = {
         loop: true,
         margin: 30,
         nav: true,
-        dots: true,
+        dots: false,
+        navText: ['<i class="uil uil-arrow-left"></i>', '<i class="uil uil-arrow-right"></i>'],
         responsive: {
           0: { items: 1 },
           768: { items: 2 },

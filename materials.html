@@ -62,6 +62,12 @@
 
             <div class="row mb-4">
                 <div class="col-12">
+                    <div id="auth-message"></div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-12">
                     <div class="filter-buttons">
                         <button class="filter-btn active" data-filter="all">Все</button>
                         <button class="filter-btn" data-filter="lectures">Лекции</button>
@@ -96,7 +102,22 @@
                 this.checkStorage();
                 this.loadMaterials();
                 this.initFilters();
+                this.updateAuthUI();
                 document.getElementById('current-year').textContent = new Date().getFullYear();
+            },
+
+            updateAuthUI() {
+                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                const authMsg = document.getElementById('auth-message');
+                if (!currentUser) {
+                    authMsg.innerHTML = '<div class="alert alert-info"><i class="uil uil-lock-alt"></i> Скачивание материалов доступно аутентифицированным пользователям. <a href="login.html">Войти</a></div>';
+                } else {
+                    authMsg.innerHTML = '';
+                }
+            },
+
+            isAuthenticated() {
+                return !!localStorage.getItem('currentUser');
             },
 
             checkStorage() {
@@ -123,6 +144,7 @@
                 const container = document.getElementById('materials-list');
                 const data = this.getData();
                 const filtered = filter === 'all' ? data : data.filter(m => m.type === filter);
+                const isAuth = this.isAuthenticated();
                 
                 container.innerHTML = filtered.map(m => `
                     <div class="col-md-6 col-lg-4 mb-4">
@@ -134,7 +156,7 @@
                                 <span><i class="uil uil-calendar-alt"></i> ${this.formatDate(m.date)}</span>
                                 <span><i class="uil uil-download-alt"></i> ${m.downloads}</span>
                             </div>
-                            <button class="btn custom-btn custom-btn-bg btn-sm" onclick="Materials.download(${m.id})">Скачать</button>
+                            ${isAuth ? `<button class="btn custom-btn custom-btn-bg btn-sm" onclick="Materials.download(${m.id})">Скачать</button>` : ''}
                         </div>
                     </div>
                 `).join('');
@@ -161,6 +183,10 @@
             },
 
             download(id) {
+                if (!this.isAuthenticated()) {
+                    alert('Для скачивания материалов необходимо войти в систему');
+                    return;
+                }
                 const data = this.getData();
                 const material = data.find(m => m.id === id);
                 material.downloads = (material.downloads || 0) + 1;

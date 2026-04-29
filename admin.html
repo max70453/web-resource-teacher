@@ -14,8 +14,7 @@
       <div class="sidebar">
         <a href="index.html" class="sidebar-brand"><i class='uil uil-graduation-cap'></i> Админ-панель</a>
         <ul class="sidebar-nav">
-          <li><a href="#" class="active" data-section="dashboard"><i class='uil uil-dashboard'></i> Обзор</a></li>
-          <li><a href="#" data-section="profile"><i class='uil uil-user'></i> Профиль</a></li>
+          <li><a href="#" class="active" data-section="profile"><i class='uil uil-user'></i> Профиль</a></li>
           <li><a href="#" data-section="achievements"><i class='uil uil-trophy'></i> Достижения</a></li>
           <li><a href="#" data-section="experience"><i class='uil uil-briefcase-alt'></i> Опыт работы</a></li>
           <li><a href="#" data-section="education"><i class='uil uil-book'></i> Образование</a></li>
@@ -415,14 +414,15 @@
 
         function loadUsers() {
           const { users } = App.loadAdminData();
-          $('#users-table tbody').html(users.map(u => `
-            <tr>
+          $('#users-table tbody').html(users.map(u => {
+            let roleLabel = u.role === 'admin' ? 'Админ' : 'Студент';
+            return `<tr>
               <td>${u.id}</td>
               <td>${u.name}</td>
               <td>${u.login}</td>
-              <td>${u.role === 'admin' ? 'Админ' : 'Преподаватель'}</td>
-            </tr>
-          `).join(''));
+              <td>${roleLabel}</td>
+            </tr>`;
+          }).join(''));
         }
 
         window.deleteAchievement = function(index) {
@@ -470,6 +470,7 @@
         }
 
         $('.sidebar-nav a').on('click', function(e) {
+          if (!$(this).data('section')) return;
           e.preventDefault();
           $('.sidebar-nav a').removeClass('active');
           $(this).addClass('active');
